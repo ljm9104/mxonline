@@ -31,6 +31,9 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+AUTHENTICATION_BACKENDS = (
+    'users.views.CustomBackend',
+)
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -46,6 +49,8 @@ INSTALLED_APPS = [
     'extra_apps',
     'xadmin',
     'crispy_forms',
+    'captcha',              # 验证码
+    'utils',
 ]
 
 # 此处重载是为了使我们的UserProfile生效
@@ -134,4 +139,17 @@ USE_TZ = False                  # 数据库存储使用时间，True时间会被
 
 STATIC_URL = '/static/'
 
-STATICFILES = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
+
+# 发送邮件的setting设置
+EMAIL_HOST = "smtp.qq.com"
+EMAIL_PORT = 25
+EMAIL_HOST_USER = "mxonline.mtianyan.cn"
+EMAIL_HOST_PASSWORD = " "
+EMAIL_USE_TLS= True
+EMAIL_FROM = "mxonline.mtianyan.cn"
+
+
