@@ -17,7 +17,25 @@ class RegisterForm(forms.Form):
     # 密码不能小于5位
     password = forms.CharField(required=True, min_length=5)
     # 应用验证码
-    captcha = CaptchaField()
+    captcha = CaptchaField(error_messages={'invalid': u'验证码错误'})
+
+
+# 注册验证码实现
+class ForgetForm(forms.Form):
+    email = forms.EmailField(required=True)
+    captcha = CaptchaField(error_messages={'invalid': u'验证码错误'})
+
+
+#
+class ModifyForm(forms.Form):
+    password1 = forms.CharField(required=True, min_length=5)
+    password2 = forms.CharField(required=True, min_length=5)
+    # 应用验证码
+    captcha = CaptchaField(error_messages={'invalid':u'验证码错误'})
+
+
+
+
 
 
 

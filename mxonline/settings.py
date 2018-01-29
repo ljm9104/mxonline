@@ -145,11 +145,11 @@ STATICFILES_DIRS = (
 
 
 # 发送邮件的setting设置
-EMAIL_HOST = "smtp.qq.com"
+EMAIL_HOST = "smtp.126.com"
 EMAIL_PORT = 25
-EMAIL_HOST_USER = "mxonline.mtianyan.cn"
-EMAIL_HOST_PASSWORD = " "
-EMAIL_USE_TLS= True
-EMAIL_FROM = "mxonline.mtianyan.cn"
+EMAIL_HOST_USER = "ljm9104@126.com"
+EMAIL_HOST_PASSWORD = "18515663268m"   # 密码，上传前去掉
+EMAIL_USE_TLS = False
+EMAIL_FROM = "ljm9104@126.com"
 
 

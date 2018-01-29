@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" >
-	<title>慕学在线网登录</title>
+	<title>雪竺轩慕课小站登录</title>
 	<link rel="stylesheet" type="text/css" href="/static/css/reset.css">
 	<link rel="stylesheet" type="text/css" href="/static/css/login.css">
 </head>
@@ -57,9 +57,9 @@
             <div class="fl slide">
                 <div class="imgslide">
                     <ul class="imgs">
-                            <li><a href=""><img width="483" height="472" src="/static/images/mysql.jpg" /></a></li>
-                            <li><a href=""><img width="483" height="472" src="/static/images/mysql.jpg" /></a></li>
-                            <li><a href=""><img width="483" height="472" src="/static/images/mysql.jpg" /></a></li>
+                            <li><a href=""><img width="483" height="472" src="/static/images/reg02.jpg" /></a></li>
+                            <li><a href=""><img width="483" height="472" src="/static/images/reg02.jpg" /></a></li>
+                            <li><a href=""><img width="483" height="472" src="/static/images/reg02.jpg" /></a></li>
                     </ul>
                 </div>
                 <div class="unslider-arrow prev"></div>
@@ -88,10 +88,12 @@
                         {{ msg }}
                     </div>
                     <div class="auto-box marb38">
-                    <a class="fr" href="forgetpwd.html">忘记密码？</a>
+                        <a class="fr" href="{% url 'forget_pwd' %} ">忘记密码？</a>
                     </div>
-                     <input class="btn btn-green" id="jsLoginBtn" type="submit" value="立即登录 > " />
-                <input type='hidden' name='csrfmiddlewaretoken' value='5I2SlleZJOMUX9QbwYLUIAOshdrdpRcy' />
+                    <div>
+                        <input class="btn btn-green" id="jsLoginBtn" type="submit" value="立即登录 > " />
+                        <input type='hidden' name='csrfmiddlewaretoken' value='5I2SlleZJOMUX9QbwYLUIAOshdrdpRcy' />
+                    </div>
                 {% csrf_token %}
                 </form>
                 <p class="form-p">没有慕学在线网帐号？<a href="register.html">[立即注册]</a></p>

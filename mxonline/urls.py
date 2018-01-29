@@ -20,6 +20,17 @@ from django.views.generic import TemplateView
 from users.views import user_login      # 基于函数登陆的
 from users.views import LoginView       # 基于类登陆的
 from users.views import RegisterView    # 注册
+from users.views import ActiveUserView  # 激活
+from users.views import ForgetPwdView   # 忘记密码
+from users.views import ResetView       # 重置密码
+from users.views import ModifyPwdView   #
+
+
+
+
+
+
+
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
     # Python3 Django2.0.1 的url的配置中          ???
@@ -32,6 +43,9 @@ urlpatterns = [
     # 注意此时应该调用类的方法as_view（）
     url('^login/$', LoginView.as_view(), name='login'),             # 登陆
     url("^register/$", RegisterView.as_view(), name="register"),    # 注册
-    url(r'^captcha/', include('captcha.urls')),                     #
-
+    url(r'^captcha/', include('captcha.urls')),                     # 验证码
+    url(r'^active/(?P<active_code>.*)/$', ActiveUserView.as_view(), name='user_active'),        # 激活
+    url(r'^forget/$', ForgetPwdView.as_view(), name='forget_pwd'),  # 忘记密码
+    url(r'^reset/(?P<active_code>.*)/$', ResetView.as_view(), name='reset_pwd'),                # 重置密码
+    url(r'^modify_pwd/$', ModifyPwdView.as_view(), name='modify_pwd'),
 ]
