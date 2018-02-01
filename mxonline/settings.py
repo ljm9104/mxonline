@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'captcha',              # 验证码
     'utils',
+    'pure_pagination',
 ]
 
 # 此处重载是为了使我们的UserProfile生效
@@ -77,9 +78,13 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                'django.template.context_processors.media',           # 设置media处理器
+                # 'django.core.context_processors.media',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
             ],
+
         },
     },
 ]
@@ -151,5 +156,11 @@ EMAIL_HOST_USER = "ljm9104@126.com"
 EMAIL_HOST_PASSWORD = "18515663268m"   # 密码，上传前去掉
 EMAIL_USE_TLS = False
 EMAIL_FROM = "ljm9104@126.com"
+
+
+# 设置我们上传文件的路径
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
