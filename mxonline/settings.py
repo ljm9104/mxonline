@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'captcha',              # 验证码
     'utils',
-    'pure_pagination',
+    'pure_pagination',      # 分页
 ]
 
 # 此处重载是为了使我们的UserProfile生效
@@ -162,5 +162,12 @@ EMAIL_FROM = "ljm9104@126.com"
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# 分页设置
+PAGINATION_SETTINGS = {
+    'PAGE_RANGE_DISPLAYED': 10,             # 总共显示多少页
+    'MARGIN_PAGES_DISPLAYED': 2,            # 旁边会显示多少页
+    'SHOW_FIRST_PAGE_WHEN_INVALID': True,   # 当输入页数不合法是否要跳到第一页
+}
 
 
