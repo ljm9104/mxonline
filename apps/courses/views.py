@@ -12,20 +12,24 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class CourseListView(View):
+    """
+    课程列表页
+    """
     def get(self, request):
         all_courses = Course.objects.all().order_by('-add_time')
 
         # 热门课程排序
-        hot_courses = Course.objects.all().order_by('-click_nums')[:3]
+        hot_courses = Course.objects.all().order_by('-click_nums')[:2]
 
         # 公开课排序,排序要放到分页前面
         sort = request.GET.get('sort', '')
         if sort:
             if sort == "students":
                 all_courses = all_courses.order_by("-students")
-            elif sort == "courses":
+            elif sort == "hot":
                 all_courses = all_courses.order_by("-click_nums")
-        # 分页
+
+        # 对课程分页
         try:
             page = request.GET.get('page', 1)
         except PageNotAnInteger:

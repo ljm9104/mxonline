@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block custom_content %}
-    <section>
+<section>
 	<div class="wp">
 		<div class="list" style="margin-top:0;">
 			<div class="left layout">
@@ -53,7 +53,7 @@
                         </div>
 
                         <div class="pageturn">
-                            <ul class="pagelist">
+                            <ul  class="pagelist">
                             {% if all_courses.has_previous %}
                                 <li class="long"><a href="?{{ all_courses.previous_page_number.querystring }}">上一页</a></li>
                             {% endif %}
@@ -88,13 +88,11 @@
                                 </a>
                             </dt>
                             <dd>
-                                <a target="_blank" href=""><h2> {{ hot_course.name }}</h2></a>
+                                <a target="_blank" href="{{ ecmall_ad.url }}"><h2> {{ hot_course.name }}</h2></a>
                                 <span class="fl">难度：<i class="key">{{ hot_course.get_degree_display }}</i></span>
                             </dd>
 					    </dl>
                     {% endfor %}
-
-
 				</div>
 			</div>
 		</div>
