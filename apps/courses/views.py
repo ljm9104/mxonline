@@ -51,6 +51,8 @@ class CourseDetailView(View):
     """
     def get(self, request, course_id):
         course = Course.objects.get(id=int(course_id))
+
+        # 增加课程点击数
         course.click_nums += 1
         course.save()
 
@@ -89,7 +91,12 @@ class CourseInfoView(LoginRequiredMixin, View):
         # 此处的id为表默认为我们添加的值。
         course = Course.objects.get(id=int(course_id))
         all_resources = CourseResource.objects.filter(course=course)
-        user_courses = UserCourse.objects.filter(course=course)
+        user_courses = UserCourse.objects.filter(user=request.user, course=course)
+        if not user_courses:
+            user_course = UserCourse(user=request.user, course=course)
+            course.students += 1
+            course.save()
+            user_course.save()
         user_ids = [user_course.user.id for user_course in user_courses]
         all_user_courses = UserCourse.objects.filter(user_id__in=user_ids)
         # 取出去哦有课程id
@@ -97,7 +104,7 @@ class CourseInfoView(LoginRequiredMixin, View):
         relate_courses = Course.objects.filter(id__in=course_id).order_by('-click_nums')[:5]
         return render(request, "course-video.html", {
             "course": course,
-            "all_resources": all_resources,
+            "course_resources": all_resources,
             'relate_courses': relate_courses,
 
         })
@@ -106,6 +113,7 @@ class CourseInfoView(LoginRequiredMixin, View):
 class CommentsView(LoginRequiredMixin, View):
     login_url = '/login/'
     redirect_field_name = 'redirect_to'
+
     def get(self, request, course_id):
         # 此处的id为表默认为我们添加的值。
         course = Course.objects.get(id=int(course_id))
@@ -125,13 +133,14 @@ class AddCommentsView(View):
         if not request.user.is_authenticated:
             # 未登录时返回json提示未登录，跳转到登录页面是在ajax中做的
             return HttpResponse('{"status":"fail", "msg":"用户未登录"}', content_type='application/json')
+
         course_id = request.POST.get("course_id", 0)
         comments = request.POST.get("comments", "")
         if int(course_id) > 0 and comments:
             course_comments = CourseComments()
             # get只能取出一条数据，如果有多条抛出异常。没有数据也抛异常
             # filter取一个列表出来，queryset。没有数据返回空的queryset不会抛异常
-            course = Course.objects.get(id = int(course_id))
+            course = Course.objects.get(id=int(course_id))
             # 外键存入要存入对象
             course_comments.course = course
             course_comments.comments = comments

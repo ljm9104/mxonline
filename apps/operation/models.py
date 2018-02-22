@@ -22,10 +22,12 @@ class UserAsk(models.Model):
         verbose_name = u"用户咨询"
         verbose_name_plural = verbose_name
 
+    def __str__(self):
+        return self.name
+
 
 # 用户对于课程评论
 class CourseComments(models.Model):
-
     # 会涉及两个外键: 1. 用户， 2. 课程。import进来
     course = models.ForeignKey(Course, verbose_name=u"课程")
     user = models.ForeignKey(UserProfile, verbose_name=u"用户")

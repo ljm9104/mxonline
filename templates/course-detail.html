@@ -19,7 +19,7 @@
 {% endblock %}
 
 {% block custom_content %}
-    <section>
+<section>
 	<div class="wp">
 		<div class="groupPurchase_detail detail">
 			<div class="toppro">
@@ -28,7 +28,6 @@
 						<div class="tb-booth tb-pic">
 							<img width="440" height="400" src="{{ MEDIA_URL }}{{ course.image }}" class="jqzoom" />
 						</div>
-
 					</div>
 					<div class="des">
 						<h1 title="django 从入门到精通体验开始了">{{ course.name }}</h1>
@@ -45,15 +44,15 @@
                                 {% for users_course in course.get_learn_users %}
                                     <span class="pic"><img width="40" height="40" src="{{ MEDIA_URL }}{{ users_course.user.image }}"/></span>
                                 {% endfor %}
-
-
 							</li>
 						</ul>
 						<div class="btns">
 							<div class="btn colectgroupbtn"  id="jsLeftBtn">
                                   {% if has_fav_course %}已收藏{% else %}收藏{% endif %}
                             </div>
-                                <div class="buy btn"><a style="color: white" href="{% url 'course:course_info' course.id %}">开始学习</a></div>
+                            <div class="buy btn">
+                                <a style="color: white" href="{% url 'course:course_info' course.id %}">开始学习</a>
+                            </div>
 						</div>
 					</div>
                     <div class="group-share-box">
@@ -109,7 +108,8 @@
 		</div>
 	</div>
 </section>
-    <section>
+
+<section>
 	<div class="wp">
 		<div class="list groupPurchase_detail_pro">
 			<div class="left layout">
@@ -132,16 +132,16 @@
                 <div class="group_recommend">
                     {% for relate_course in relate_courses %}
                         <dl>
-                        <dt>
-                            <a target="_blank" href="">
-                                <img width="240" height="160" class="scrollLoading" src="{{ MEDIA_URL }}{{ relate_course.image }}"/>
-                            </a>
-                        </dt>
-                        <dd>
-                            <a target="_blank" href=""><h2> {{ relate_course.name }}</h2></a>
-                            <span class="fl">学习时长：<i class="key">{{ relate_course.learn_times }}</i></span>
-                        </dd>
-                    </dl>
+                            <dt>
+                                <a target="_blank" href="">
+                                    <img width="240" height="160" class="scrollLoading" src="{{ MEDIA_URL }}{{ relate_course.image }}"/>
+                                </a>
+                            </dt>
+                            <dd>
+                                <a target="_blank" href=""><h2> {{ relate_course.name }}</h2></a>
+                                <span class="fl">学习时长：<i class="key">{{ relate_course.learn_times }}</i></span>
+                            </dd>
+                        </dl>
                     {% endfor %}
                 </div>
 			</div>

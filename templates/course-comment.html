@@ -5,12 +5,12 @@
 {% load staticfiles %}
 
 {% block custom_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/muke/base.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/muke/common-less.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/muke/course/learn-less.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/aui.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/mooc.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/muke/course/course-comment.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/muke/base.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/muke/common-less.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/muke/course/common-less.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/mooc.css' %}" />
 {% endblock %}
 
 
@@ -30,35 +30,34 @@
 {% endblock %}
 
 {% block custom_content %}
-    <div id="main">
+<div id="main">
     <div class="course-infos">
-            <div class="w pr">
-                <div style="height: 15px" class="path">
+        <div class="w pr">
+            <div style="height: 15px" class="path">
+            </div>
+            <div class="hd">
+                <h2 class="l">&nbsp;&nbsp;{{ course.name }}</h2>
+            </div>
+            <div class="statics clearfix">
+                <div class="static-item ">
+                    <span class="meta">难度</span>
+                    <span class="meta-value">{{ course.get_degree_display }}</span>
+                    <em></em>
                 </div>
-                <div class="hd">
-                    <h2 class="l">&nbsp;&nbsp;{{ course.name }}</h2>
+                <div class="static-item">
+                    <span class="meta">时长</span>
+                    <span class="meta-value">{{ course.learn_times }}分钟</span>
+                    <em></em>
                 </div>
-                <div class="statics clearfix">
-                    <div class="static-item ">
-                        <span class="meta">难度</span>
-                        <span class="meta-value">{{ course.get_degree_display }}</span>
-                        <em></em>
-                    </div>
-                    <div class="static-item">
-                        <span class="meta">时长</span>
-                        <span class="meta-value">{{ course.learn_times }}分钟</span>
-                        <em></em>
-                    </div>
-                    <div class="static-item">
-                        <span class="meta">学习人数</span>
-                        <span class="meta-value">{{ course.students }}</span>
-                        <em></em>
-                    </div>
+                <div class="static-item">
+                    <span class="meta">学习人数</span>
+                    <span class="meta-value">{{ course.students }}</span>
+                    <em></em>
                 </div>
             </div>
         </div>
+    </div>
     <div class="course-info-main clearfix w has-progress">
-
         <div class="info-bar clearfix">
             <div class="content-wrap clearfix">
                 <div class="content">

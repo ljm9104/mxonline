@@ -53,6 +53,10 @@ class CourseOrg(models.Model):
     # 当发布课程就加1
     course_nums = models.IntegerField(default=0, verbose_name=u"课程数")
 
+    # 获取课程机构教师
+    def get_teacher_nums(self):
+        return self.teacher_set.all().count()
+
     class Meta:
         verbose_name = u"课程机构"
         verbose_name_plural = verbose_name
