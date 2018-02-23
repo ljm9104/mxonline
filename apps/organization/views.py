@@ -7,6 +7,7 @@ from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from .forms import UserAskForm
 from courses.models import Course
 from operation.models import UserFavorite
+from django.db.models import Q
 
 # Create your views here.
 
@@ -204,67 +205,66 @@ class AddFavView(View):
                 return HttpResponse('{"status":"fail", "msg":"收藏出错"}', content_type='application/json')
 
 
-# 课程讲师列表页
 class TeacherListView(View):
-        def get(self, request):
-            all_teacher = Teacher.objects.all()
-            sort = request.GET.get("sort", "")
-            if sort:
-                if sort == "hot":
-                    all_teacher = all_teacher.order_by("-click_nums")
+    """
+    课程讲师列表页
+    """
+    def get(self, request):
+        all_teachers = Teacher.objects.all()
+        # 课程讲师搜索
+        search_keywords = request.GET.get('keywords', "")
+        if search_keywords:
+            all_teachers = all_teachers.filter(Q(name__icontains=search_keywords)|
+                                               Q(work_company__icontains=search_keywords)|
+                                               Q(work_position__icontains=search_keywords))
 
-              # 搜索功能
-            search_keywords = request.GET.get('keywords', '')
-            if search_keywords:
-                # 在name字段进行操作,做like语句的操作。i代表不区分大小写
-                # or操作使用Q
-                all_teacher = all_teacher.filter(
-                    Q(name__icontains=search_keywords) | Q(work_company__icontains=search_keywords))
+        sort = request.GET.get('sort', "")
+        if sort:
+            if sort == "hot":
+                all_teachers = all_teachers.order_by("-click_nums")
 
-            # 排行榜讲师
-            rank_teacher = Teacher.objects.all().order_by("-fav_nums")[:5]
-            # 总共有多少老师使用count进行统计
-            teacher_nums = all_teacher.count()
-            # 对讲师进行分页
-            # 尝试获取前台get请求传递过来的page参数
-            # 如果是不合法的配置参数默认返回第一页
-            try:
-                page = request.GET.get('page', 1)
-            except PageNotAnInteger:
-                page = 1
-            # 这里指从allorg中取五个出来，每页显示5个
-            p = Paginator(all_teacher, 4, request=request)
-            teachers = p.page(page)
-            return render(request, "teachers-list.html", {
-            "all_teacher":teachers,
-            "teacher_nums":teacher_nums,
-                "sort":sort,
-                "rank_teachers":rank_teacher,
-                "search_keywords": search_keywords,
-            })
+        sorted_teacher = Teacher.objects.all().order_by("-click_nums")[:3]
+
+        # 对讲师进行分页
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+
+        p = Paginator(all_teachers, 1, request=request)
+
+        teachers = p.page(page)
+        return render(request, "teachers-list.html", {
+            "all_teachers":teachers,
+            "sorted_teacher":sorted_teacher,
+            "sort":sort,
+        })
 
 
-# 教师详情页面
 class TeacherDetailView(View):
     def get(self, request, teacher_id):
-        teacher = Teacher.objects.get(id = int(teacher_id))
-        teacher.click_nums +=1
+        teacher = Teacher.objects.get(id=int(teacher_id))
+        teacher.click_nums += 1
         teacher.save()
-        all_course = teacher.course_set.all()
-        # 排行榜讲师
-        rank_teacher = Teacher.objects.all().order_by("-fav_nums")[:5]
+        all_courses = Course.objects.filter(teacher=teacher)
 
-        has_fav_teacher = False
-        if UserFavorite.objects.filter(user=request.user, fav_type=3, fav_id= teacher.id):
-            has_fav_teacher = True
-        has_fav_org = False
-        if  UserFavorite.objects.filter(user=request.user, fav_type=2, fav_id= teacher.org.id):
-            has_fav_org = True
+        has_teacher_faved = False
+        if request.user.is_authenticated():
+            if UserFavorite.objects.filter(user=request.user, fav_type=3, fav_id=teacher.id):
+                has_teacher_faved = True
+
+        has_org_faved = False
+        if request.user.is_authenticated():
+            if UserFavorite.objects.filter(user=request.user, fav_type=2, fav_id=teacher.org.id):
+                has_org_faved = True
+
+        # 讲师排行
+        sorted_teacher = Teacher.objects.all().order_by("-click_nums")[:3]
         return render(request, "teacher-detail.html", {
-            "teacher":teacher,
-            "all_course":all_course,
-            "rank_teacher":rank_teacher,
-            "has_fav_teacher":has_fav_teacher,
-            "has_fav_org":has_fav_org,
+            "teacher": teacher,
+            "all_courses": all_courses,
+            "sorted_teacher": sorted_teacher,
+            "has_teacher_faved": has_teacher_faved,
+            "has_org_faved": has_org_faved
         })
 

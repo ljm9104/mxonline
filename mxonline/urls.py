@@ -56,4 +56,5 @@ urlpatterns = [
 
     # 公开课
     url(r'^course/', include('courses.urls', namespace='course')),
+
 ]

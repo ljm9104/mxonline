@@ -3,7 +3,7 @@ from django.views.generic.base import View
 from django.http import HttpResponse
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from courses.models import Course, CourseResource, Video
-from operation.models import UserFavorite, CourseComments,UserCourse
+from operation.models import UserFavorite, CourseComments, UserCourse
 # from utils.mixin_utils import LoginRequiredMixin
 
 from django.contrib.auth.mixins import LoginRequiredMixin
