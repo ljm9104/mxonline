@@ -57,4 +57,7 @@ urlpatterns = [
     # 公开课
     url(r'^course/', include('courses.urls', namespace='course')),
 
+    # user app的url配置
+    url(r'^users/', include('users.urls', namespace="users")),
+
 ]

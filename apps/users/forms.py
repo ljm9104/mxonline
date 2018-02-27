@@ -1,5 +1,10 @@
 from django import forms                    # 引入Django表单
+from django.views.generic.base import View
+from django.shortcuts import render, HttpResponse
+from django.contrib.auth.hashers import make_password       # 密码加密
 from captcha.fields import CaptchaField
+
+from .models import UserProfile
 
 
 # 登陆表单验证
@@ -27,11 +32,21 @@ class ForgetForm(forms.Form):
 
 
 #
-class ModifyForm(forms.Form):
+class ModifyPwdForm(forms.Form):
     password1 = forms.CharField(required=True, min_length=5)
     password2 = forms.CharField(required=True, min_length=5)
     # 应用验证码
     captcha = CaptchaField(error_messages={'invalid':u'验证码错误'})
+
+
+# 头像上传
+class UploadImageForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['image']
+
+
+
 
 
 

@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.backends import ModelBackend
@@ -11,9 +12,12 @@ from django.views.generic.base import View
 from operation.models import UserCourse, UserFavorite, UserMessage
 from .models import UserProfile, EmailVerifyRecord
 # form表单验证 & 验证码
-from .forms import LoginForm, RegisterForm, ForgetForm, ModifyForm
+from .forms import LoginForm, RegisterForm, ForgetForm, ModifyPwdForm, UploadImageForm
 from django.contrib.auth.hashers import make_password       # 密码加密
 from utils.email_send import send_register_eamil            # 发送邮件
+from utils.mixin_utils import LoginRequiredMixin            #
+
+# Create your views here.
 
 
 # 实现用户名和邮箱都可以登陆
@@ -29,9 +33,6 @@ class CustomBackend(ModelBackend):
                 return user
         except Exception as e:
             return None
-
-
-# Create your views here.
 
 
 # 基于类实现登陆功能，自定义类需要继承django模块中View
@@ -193,6 +194,7 @@ class ResetView(View):
         return render(request, "login.html")
 
 
+# 修改密码
 class ModifyPwdView(View):
     def post(self, request):
         modify_form = ModifyForm(request.POST)
@@ -210,3 +212,40 @@ class ModifyPwdView(View):
         else:
             email = request.POST.get('email', '')
             return render(request, "password_reset.html", {'email': email, 'modify_form': modify_form})
+
+
+# 用户个人信息
+class UserinfoView(LoginRequiredMixin, View):
+    def get(self, request):
+        return render(request, 'usercenter-info.html', {
+
+        })
+
+
+# 用户头像上传
+class UploadImageView(LoginRequiredMixin, View):
+    def post(self, request):
+        image_form = UploadImageForm(request.POST, request.FILES, instance=request.user)
+        if image_form.is_valid():
+            image_form.save()
+            return HttpResponse('{"status":"success"}', content_type='application/json')
+        else:
+            return HttpResponse('{"status":"fail"}', content_type='application/json')
+
+
+# 个人中心修改密码
+class UpdatePwdView(View):
+    def post(self, request):
+        modify_form = ModifyPwdForm(request.POST)
+        if modify_form.is_valid():
+            pwd1 = request.POST.get("password1", "")
+            pwd2 = request.POST.get("password2", "")
+            if pwd1 != pwd2:
+                return HttpResponse('{"status":"fail","msg":"密码不一致"}', content_type='application/json')
+            user = request.user
+            user.password = make_password(pwd2)
+            user.save()
+
+            return HttpResponse('{"status":"success"}', content_type='application/json')
+        else:
+            return HttpResponse(json.dumps(modify_form.errors), content_type='application/json')
