@@ -7,6 +7,7 @@ from operation.models import UserFavorite, CourseComments, UserCourse
 # from utils.mixin_utils import LoginRequiredMixin
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 
 # Create your views here.
 
@@ -20,6 +21,14 @@ class CourseListView(View):
 
         # 热门课程排序
         hot_courses = Course.objects.all().order_by('-click_nums')[:2]
+
+        # 课程搜索
+        search_keywords = request.GET.get('keywords', '')
+        if search_keywords:
+            all_courses = all_courses.filter(Q(name__icontains=search_keywords) |
+                                             Q(desc__icontains=search_keywords) |
+                                             Q(detail__icontains=search_keywords)
+                                             )
 
         # 公开课排序,排序要放到分页前面
         sort = request.GET.get('sort', '')
