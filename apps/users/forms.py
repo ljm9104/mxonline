@@ -46,6 +46,13 @@ class UploadImageForm(forms.ModelForm):
         fields = ['image']
 
 
+#
+class UserinfoForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['nick_name', 'gender', 'birthday', 'address', 'mobile']
+
+
 
 
 
