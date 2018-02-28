@@ -72,13 +72,12 @@
                     <a class="more" href="{% url 'course:course_list' %}">查看更多课程 ></a>
                 </div>
                 <div class="right group_list">
-
                     <div class="module1_2 box">
                         <div class="imgslide2">
                             <ul class="imgs">
                                 {% for banner_course in banner_courses %}
                                     <li>
-                                        <a href="{% url 'course:course_detail' %}">
+                                        <a href="{% url 'course:course_detail' banner_course.id %}">
                                             <img width="470" height="300"
                                                  src="{{ MEDIA_URL }}{{ banner_course.image }}"/>
                                         </a>
@@ -90,24 +89,24 @@
                         <div class="unslider-arrow2 next"></div>
                     </div>
 
-                {% for course in courses %}
-                    <div class="module1_{{ forloop.counter|add:2 }} box">
-                        <a href="{% url 'course:course_detail' course.id %}">
-                            <img width="233" height="190" src="{{ MEDIA_URL }}{{ course.image }}"/>
-                        </a>
-                        <div class="des">
+                    {% for course in courses %}
+                        <div class="module1_{{ forloop.counter|add:2 }} box">
                             <a href="{% url 'course:course_detail' course.id %}">
-                                <h2 title="{{ course.name }}">{{ course.name }}</h2>
+                                <img width="233" height="190" src="{{ MEDIA_URL }}{{ course.image }}"/>
                             </a>
-                            <span class="fl">难度：<i class="key">{{ course.degree }}</i></span>
-                            <span class="fr">学习人数：{{ course.students }}</span>
+                            <div class="des">
+                                <a href="{% url 'course:course_detail' course.id %}">
+                                    <h2 title="{{ course.name }}">{{ course.name }}</h2>
+                                </a>
+                                <span class="fl">难度：<i class="key">{{ course.get_degree_display }}</i></span>
+                                <span class="fr">学习人数：{{ course.students }}</span>
+                            </div>
+                            <div class="bottom">
+                                <span class="fl" title="{{ course.course_org.name }}">{{ course.course_org.name }}</span>
+                                <span class="star fr">{{ course.fav_nums }}</span>
+                            </div>
                         </div>
-                        <div class="bottom">
-                            <span class="fl" title="{{ course.course_org.name }}">{{ course.course_org.name }}</span>
-                            <span class="star fr">{{ course.fav_nums }}</span>
-                        </div>
-                    </div>
-                {% endfor  %}
+                    {% endfor  %}
 
                 </div>
             </div>
