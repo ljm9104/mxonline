@@ -25,9 +25,9 @@ sys.path.insert(0,os.path.join(BASE_DIR, 'extra_apps'))
 SECRET_KEY = 'ub!%d9!%c*64lvpk-^vn4vqx2k_rn-$fak28h@)h+%dri@jqri'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -101,7 +101,7 @@ DATABASES = {
         'NAME': 'mxonline',
         'USER': 'root',
         'PASSWORD': '123',
-        'HOST':'127.0.0.1',
+        'HOST': '127.0.0.1',
     }
 }
 
@@ -143,7 +143,6 @@ USE_TZ = False                  # 数据库存储使用时间，True时间会被
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
@@ -158,10 +157,19 @@ EMAIL_USE_TLS = False
 EMAIL_FROM = "ljm9104@126.com"
 
 
-# 设置我们上传文件的路径
+"""
+在debug为false情况下。我们在访问media的时候配置过用serve来取告诉它访问media的时候去哪个路径下找
 
+debug为True会自动前往STATICFILES——DIRS取文件的
+一旦debug改为false，django就不会代管你的静态文件，一般静态文件通过第三方http服务器代理转发。
+
+nignx 和 Apache都会自动代理这些静态文件
+"""
+
+# 设置我们上传文件的路径
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # 分页设置
 PAGINATION_SETTINGS = {

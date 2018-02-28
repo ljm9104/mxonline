@@ -34,6 +34,7 @@ class CourseOrg(models.Model):
     name = models.CharField(max_length=50, verbose_name=u"机构名称")
     # 机构描述，后面会替换为富文本展示
     desc = models.TextField(verbose_name=u"机构描述")
+    tag = models.CharField(max_length=10, verbose_name=u"机构标签", default=u"名校")
     ORG_CHOICES = (("pxjg", u"培训机构"), ("gx", u"高校"), ("gr", u"个人"),)
     # 机构类别:
     category = models.CharField(max_length=20, choices=ORG_CHOICES, verbose_name=u"机构类别", default="pxjg")

@@ -99,6 +99,8 @@ class CourseInfoView(LoginRequiredMixin, View):
     def get(self, request, course_id):
         # 此处的id为表默认为我们添加的值。
         course = Course.objects.get(id=int(course_id))
+        course.students += 1
+        course.save()
         all_resources = CourseResource.objects.filter(course=course)
         user_courses = UserCourse.objects.filter(user=request.user, course=course)
         if not user_courses:

@@ -19,13 +19,17 @@ import xadmin
 from django.views.generic import TemplateView
 from users.views import user_login      # 基于函数登陆的
 from users.views import LoginView       # 基于类登陆的
+from users.views import LogoutView       # 基于类登陆的
 from users.views import RegisterView    # 注册
 from users.views import ActiveUserView  # 激活
 from users.views import ForgetPwdView   # 忘记密码
 from users.views import ResetView       # 重置密码
 from users.views import ModifyPwdView   #
+from users.views import IndexView
+
 from organization.views import OrgView
 from .settings import MEDIA_ROOT
+from .settings import STATIC_ROOT
 from django.views.static import serve
 
 
@@ -33,13 +37,13 @@ urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
     # Python3 Django2.0.1 的url的配置中          ???
     # url('xadmin/', xadmin.site.urls),
-    url('^$', TemplateView.as_view(template_name='index.html'), name='index'),
+    url('^$', IndexView.as_view(), name='index'),
     # url('^login/$', TemplateView.as_view(template_name='login.html'), name='login'),
     # 登录页面跳转url，login不直接调用，而是指向这个函数对象
     # url('^login/$', user_login, name='login'),
-    # 基于类登陆
-    # 注意此时应该调用类的方法as_view（）
+    # 基于类登陆,注意此时应该调用类的方法as_view（）
     url('^login/$', LoginView.as_view(), name='login'),             # 登陆
+    url('^logout/$', LogoutView.as_view(), name='logout'),          # 登出
     url("^register/$", RegisterView.as_view(), name="register"),    # 注册
     url(r'^captcha/', include('captcha.urls')),                     # 验证码
     url(r'^active/(?P<active_code>.*)/$', ActiveUserView.as_view(), name='user_active'),        # 激活
@@ -53,6 +57,7 @@ urlpatterns = [
 
     # 处理图片显示的url,使用Django自带serve,传入参数告诉它去哪个路径找，我们有配置好的路径MEDIAROOT
     url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
+    url(r'^static/(?P<path>.*)$', serve, {"document_root": STATIC_ROOT}),
 
     # 公开课
     url(r'^course/', include('courses.urls', namespace='course')),
@@ -61,3 +66,7 @@ urlpatterns = [
     url(r'^users/', include('users.urls', namespace="users")),
 
 ]
+
+# 全局404页面配置
+handler404 = 'users.views.page_not_found'
+handler500 = 'users.views.page_error'

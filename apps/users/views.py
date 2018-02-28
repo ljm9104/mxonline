@@ -1,8 +1,8 @@
 import json
 from django.shortcuts import render
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.backends import ModelBackend
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, HttpResponseRedirect
 
 # 并集运算
 from django.db.models import Q
@@ -10,7 +10,7 @@ from django.db.models import Q
 # 导入View，基于类实现需要继承的view
 from django.views.generic.base import View
 from operation.models import UserCourse, UserFavorite, UserMessage
-from .models import UserProfile, EmailVerifyRecord
+from .models import UserProfile, EmailVerifyRecord, Banner
 # form表单验证 & 验证码
 from .forms import LoginForm, RegisterForm, ForgetForm, ModifyPwdForm, UploadImageForm, UserinfoForm
 from django.contrib.auth.hashers import make_password       # 密码加密
@@ -21,6 +21,7 @@ from organization.models import CourseOrg, Teacher
 from courses.models import Course
 
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
+from django.core.urlresolvers import reverse
 
 # Create your views here.
 
@@ -67,7 +68,7 @@ class LoginView(View):
                 if user.is_active:
                     login(request, user)
                     # 跳转到首页 user request会被带回到首页
-                    return render(request, "index.html")
+                    return HttpResponseRedirect(reverse('index'))
                 else:
                     return render(request, 'login.html', {"msg": "用户名尚未激活!"})
             else:
@@ -76,6 +77,14 @@ class LoginView(View):
         # 没有成功说明里面的值是None，并再次跳转回主页面
         else:
             return render(request, "login.html", {'login_form': login_form})
+
+
+# 用户登出
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+
+        return HttpResponseRedirect(reverse('index'))
 
 
 # 当我们配置url被这个view处理时，自动传入request对象
@@ -365,3 +374,45 @@ class MyMessageView(LoginRequiredMixin, View):
         return render(request, 'usercenter-message.html', {
             "messages": messages
         })
+
+
+# 首页
+class IndexView(View):
+    def get(self, request):
+        # 取出轮播图
+        all_banners = Banner.objects.all().order_by('index')[:5]
+        # 正常位课程
+        courses = Course.objects.filter(is_banner=False)[:6]
+        # 轮播图课程取三个
+        banner_courses = Course.objects.filter(is_banner=True)[:3]
+        # 课程机构
+        course_orgs = CourseOrg.objects.all()[:10]
+        # print(1 / 0)
+        return render(request, 'index.html', {
+            'all_banners': all_banners,
+            'courses': courses,
+            'banner_courses': banner_courses,
+            'course_orgs': course_orgs,
+        })
+
+
+# 404页面对应处理view, Debug = True时候 404页面是不起作用的
+def page_not_found(request):
+    from django.shortcuts import render_to_response
+    response = render_to_response("404.html", {
+
+    })
+    # 设置response的状态码
+    response.status_code = 404
+    return response
+
+
+# 500页面对应处理view
+def page_error(request):
+    from django.shortcuts import render_to_response
+    response = render_to_response("500.html", {
+
+    })
+    # 设置response的状态码
+    response.status_code = 500
+    return response
