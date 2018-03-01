@@ -7,13 +7,13 @@ from operation.models import CourseComments, UserFavorite, UserMessage, UserCour
 from organization.models import CityDict, Teacher, CourseOrg
 from xadmin.models import Log
 
-# 和X admin的view绑定
+# 和Xadmin的view绑定
 from xadmin import views
 
 from .models import EmailVerifyRecord, Banner, UserProfile
 
 
-# X admin的全局配置信息设置
+# Xadmin的全局配置信息设置
 class BaseSetting(object):
     # 主题功能开启
     enable_themes = True
@@ -69,6 +69,7 @@ class EmailVerifyRecordAdmin(object):
     search_fields = ['code', 'email', 'send_type']
     # 配置筛选字段
     list_filter = ['code', 'email', 'send_type', 'send_time']
+    model_icon = 'fa fa-group'
 
 
 # 创建banner的管理类

@@ -19,6 +19,7 @@ import xadmin
 from django.views.generic import TemplateView
 from users.views import user_login      # 基于函数登陆的
 from users.views import LoginView       # 基于类登陆的
+# from users.views import LoginUnsafeView  #
 from users.views import LogoutView       # 基于类登陆的
 from users.views import RegisterView    # 注册
 from users.views import ActiveUserView  # 激活
@@ -31,9 +32,10 @@ from organization.views import OrgView
 from .settings import MEDIA_ROOT
 from .settings import STATIC_ROOT
 from django.views.static import serve
-
+from django.views.generic.base import RedirectView
 
 urlpatterns = [
+
     url(r'^xadmin/', xadmin.site.urls),
     # Python3 Django2.0.1 的url的配置中          ???
     # url('xadmin/', xadmin.site.urls),
@@ -43,6 +45,7 @@ urlpatterns = [
     # url('^login/$', user_login, name='login'),
     # 基于类登陆,注意此时应该调用类的方法as_view（）
     url('^login/$', LoginView.as_view(), name='login'),             # 登陆
+    # url('^login/', LoginUnsafeView.as_view(), name='login'),
     url('^logout/$', LogoutView.as_view(), name='logout'),          # 登出
     url("^register/$", RegisterView.as_view(), name="register"),    # 注册
     url(r'^captcha/', include('captcha.urls')),                     # 验证码

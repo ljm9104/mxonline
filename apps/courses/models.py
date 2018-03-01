@@ -61,6 +61,13 @@ class Course(models.Model):
     def get_zj_nums(self):
         all_lessons = self.lesson_set.all().count()
         return all_lessons
+    get_zj_nums.short_description = "章节数"
+
+    def go_to(self):
+        from django.utils.safestring import mark_safe
+        # 如果不mark safe。会对其进行转义
+        return mark_safe("<a href='http://blog.mtianyan.cn'>跳转</>")
+    go_to.short_description = "跳转"
 
     # 获取学习用户
     def get_learn_users(self):
@@ -72,6 +79,13 @@ class Course(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class BannerCourse(Course):
+    class Meta:
+        verbose_name = u'轮播课程'
+        verbose_name_plural = verbose_name
+        proxy = True   # 设置proxy = true会具有model的功能，但不会生成表
 
 
 # 章节

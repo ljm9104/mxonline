@@ -15,6 +15,8 @@ class CourseOrgAdmin(object):
     list_display = ['name', 'desc', 'category', 'click_nums', 'fav_nums', 'add_time']
     search_fields = ['name', 'desc', 'category', 'click_nums', 'fav_nums']
     list_filter = ['name', 'desc', 'category', 'click_nums', 'fav_nums', 'city__name', 'address', 'add_time']
+    # 下拉框搜索：当有外键指向他，会以ajax方式加载数据量过大时很有用
+    relfield_style = 'fk-ajax'
 
 
 class TeacherAdmin(object):
