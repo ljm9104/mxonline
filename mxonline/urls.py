@@ -35,7 +35,7 @@ from django.views.static import serve
 from django.views.generic.base import RedirectView
 
 urlpatterns = [
-
+    url(r'^favicon.ico$', RedirectView.as_view(url=r'static/favicon.ico')),
     url(r'^xadmin/', xadmin.site.urls),
     # Python3 Django2.0.1 的url的配置中          ???
     # url('xadmin/', xadmin.site.urls),
