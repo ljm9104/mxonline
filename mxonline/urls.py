@@ -34,6 +34,22 @@ from .settings import STATIC_ROOT
 from django.views.static import serve
 from django.views.generic.base import RedirectView
 
+"""
+Django中favicon.ico文件的配置
+默认情况下，浏览器访问一个网站的时候，同时还会向服务器请求“/favicon.ico”这个URL，目的是获取网站的图标。
+若没有配置的话，Django就会返回一个404错误，并且浏览器接收到这个404错误后不会显示出来，一般不会被察觉。
+但是服务器要是开启日志记录的话，这错误就会一直记录下来，累积一大堆无用的记录。
+步骤如下：
+制作一个ico文件，使用PS或者某些在线生成ico的网站即可
+将此文件命名为“favicon.ico”后放在static/下
+在url.py中添加：
+from Django.views.generic.base import RedirectView
+urlpatterns=[
+    url(r'^favicon.ico$',RedirectView.as_view(url=r'static/favicon.ico')),       
+]
+"""
+
+
 urlpatterns = [
     url(r'^favicon.ico$', RedirectView.as_view(url=r'static/favicon.ico')),
     url(r'^xadmin/', xadmin.site.urls),
