@@ -114,9 +114,9 @@
                         <div class="box mb40">
                             <h4>讲师提示</h4>
                             <div class="teacher-info">
-                                <a href="/u/315464/courses?sort=publish" target="_blank">
-                                    <img src='{{ MEDIA_URL }}{{ course.teacher.image }}' width='80' height='80' />
-                                </a>
+                            <a href="{% url 'org:teacher_detail' course.teacher.id  %}" target="_blank">
+                                <img src='{{ MEDIA_URL }}{{ course.teacher.image }}' width='80' height='80' />
+                            </a>
                                 <span class="tit">
                                   <a href="/u/315464/courses?sort=publish" target="_blank">{{ course.teacher.name }}</a>
                                 </span>
@@ -142,12 +142,14 @@
                                     <!-- img 200 x 112 -->
                                     <ul class="other-list">
 
-                                        <li class="curr">
-                                            <a href="course-detail.html" target="_blank">
-                                                <img src="../media/courses/2016/11/540e57300001d6d906000338-240-135_n0L8vbw.jpg" alt="django与vuejs实战项目2">
-                                                <span class="name autowrap">django与vuejs实战项目2</span>
-                                            </a>
-                                        </li>
+                                       {% for relate_course in relate_courses  %}
+                                            <li class="curr">
+                                                <a href="{% url 'course:course_detail' relate_course.id %}" target="_blank">
+                                                    <img src="{{ MEDIA_URL }}{{ relate_course.image }}" alt="{{ relate_course.name }}">
+                                                    <span class="name autowrap">{{ relate_course.name }}</span>
+                                                </a>
+                                            </li>
+                                        {% endfor %}
 
                                     </ul>
                                 </div>
@@ -175,7 +177,7 @@
 {% endblock %}
 
 {% block custom_js %}
-    <script type="text/javascript">
+<script type="text/javascript">
     //添加评论
     $('#js-pl-submit').on('click', function(){
         var comments = $("#js-pl-textarea").val()
@@ -195,7 +197,7 @@
             success: function(data) {
                 if(data.status == 'fail'){
                     if(data.msg == '用户未登录'){
-                        window.location.href="/login/";
+                        window.location.href="{% url 'login' %}";
                     }else{
                         alert(data.msg)
                     }
@@ -207,5 +209,5 @@
         });
     });
 
-    </script>
+</script>
 {% endblock %}
