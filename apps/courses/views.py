@@ -130,11 +130,21 @@ class CommentsView(LoginRequiredMixin, View):
         course = Course.objects.get(id=int(course_id))
         all_resources = CourseResource.objects.filter(course=course)
         all_comments = CourseComments.objects.all()
-
+        user_courses = UserCourse.objects.filter(course=course)
+        # 从关系中取出user_id
+        user_ids = [user_course.user_id for user_course in user_courses]
+        # 这些用户学了的课程,外键会自动有id，取到字段
+        all_user_courses = UserCourse.objects.filter(user_id__in=user_ids)
+        # 取出所有课程id
+        course_ids = [user_course.course_id for user_course in all_user_courses]
+        # 获取学过该课程用户学过的其他课程
+        relate_courses = Course.objects.filter(id__in=course_ids).order_by("-click_nums").exclude(id=course.id)[:4]
+        # 是否收藏课程
         return render(request, "course-comment.html", {
             "course": course,
             "all_resources": all_resources,
-            "all_comments": all_comments
+            "all_comments": all_comments,
+            "relate_courses": relate_courses,
         })
 
 
